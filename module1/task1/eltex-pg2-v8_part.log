@@ -1,0 +1,25 @@
+screen -S "`whoami`_part2"
+screen -ls
+touch "$(whoami)_part.log"
+echo ${HISTSIZE}
+ls -a
+export HISTTIMEFORMAT="%F %T "
+date
+history 2
+tail ~/.bash_history
+export PROMT_COMMAND='history -a'
+ls
+tail ~/.bash_history
+history 2
+DATE=$(date +%Y-%m-%d)
+echo $DATE
+TIME=$(date +%T)
+echo $TIME
+DATE_TIME="$DATE $TIME"
+echo $DATE_TIME
+ls -p /sbin /bin | grep -v / | grep "[0-9]"
+export PS1='${USER}@${HOSTNAME}-$(date +%H:%M)>'
+export PS1
+bash --norc
+mkdir -p ~/$(date +%Y)-{01..12}
+ls

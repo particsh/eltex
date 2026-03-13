@@ -1,0 +1,23 @@
+mkdir -p D1/D2/D3
+cd ./D1/D2 && touch file.txt
+ls
+echo "Hallo" >> file.txt
+ln ../file.txt hardlink
+ln -s ../file.txt symlink
+cat hardlink
+cat symlink
+cd ..
+mv file.txt ../
+cd D2/D3/
+cat hardlink
+cat symlink
+cd ..
+cd ..
+rm -rf D2
+find / -type f -size +20M 2>/dev/null
+find / -type f -size +20M 2>/dev/null | xargs du -sh
+find / -type f -size +20M 2>/dev/null > "${USER}_part3_gt50M.log"
+find ~ -type f -mtime -1
+type find 
+file /usr/bin/find
+file /boot/initrd.img*
