@@ -1,0 +1,326 @@
+2. 
+
+root@eltex-practice2-pg2-v8:~# git config --global user.name "particsh"
+root@eltex-practice2-pg2-v8:~# git config --global user.email "maxim.plotnitskiyreborn@gmail.com"
+root@eltex-practice2-pg2-v8:~# git config --global init.defaultBranch main
+
+3.
+
+
+root@eltex-practice2-pg2-v8:~# apt update
+Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Hit:2 http://ru.archive.ubuntu.com/ubuntu noble InRelease
+Get:3 http://ru.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://ru.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+Get:6 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1,808 kB]
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [10.6 kB]
+Get:8 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [74.2 kB]
+Get:10 http://security.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [20.8 kB]
+Get:11 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+Get:12 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [177 kB]
+Get:13 http://ru.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:14 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1,566 kB]
+Get:15 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [386 kB]
+Get:16 http://ru.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:17 http://ru.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7,288 B]
+Get:18 http://ru.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:19 http://ru.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [32.0 kB]
+Get:20 http://ru.archive.ubuntu.com/ubuntu noble-backports/universe Translation-en [18.3 kB]
+Get:21 http://ru.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+Get:22 http://ru.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [780 B]
+Get:23 http://ru.archive.ubuntu.com/ubuntu noble-backports/multiverse Translation-en [372 B]
+Get:24 http://ru.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Fetched 4,515 kB in 1s (3,895 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+87 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@eltex-practice2-pg2-v8:~# apt install git gh
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+git set to manually installed.
+The following NEW packages will be installed:
+  gh
+0 upgraded, 1 newly installed, 0 to remove and 87 not upgraded.
+Need to get 8,836 kB of archives.
+After this operation, 45.4 MB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 gh amd64 2.45.0-1ubuntu0.3 [8,836 kB]
+Fetched 8,836 kB in 1s (8,565 kB/s)
+Selecting previously unselected package gh.
+(Reading database ... 125245 files and directories currently installed.)
+Preparing to unpack .../gh_2.45.0-1ubuntu0.3_amd64.deb ...
+Unpacking gh (2.45.0-1ubuntu0.3) ...
+Setting up gh (2.45.0-1ubuntu0.3) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...
+Scanning candidates...
+Scanning linux images...
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-55-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-101-generic.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart getty@tty1.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@eltex-practice2-pg2-v8:~#
+
+4.
+
+root@eltex-practice2-pg2-v8:~# ssh-keygen -t ed25519 -f ~/.ssh/particsh
+Generating public/private ed25519 key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/particsh
+Your public key has been saved in /root/.ssh/particsh.pub
+The key fingerprint is:
+SHA256:8VKdJXKXG2IRpqh80oXSPnMqDvpHAfz3tGAFzh9UCjc root@eltex-practice2-pg2-v8
+The key's randomart image is:
++--[ED25519 256]--+
+|   .    o.E.Boo. |
+|    o  + *.Oo=o  |
+|     o. B.*.o. o |
+|     .o=+*..  .  |
+|      ++S++.     |
+|      .o *o      |
+|    ... .        |
+|   . o..         |
+|  .....          |
++----[SHA256]-----+
+root@eltex-practice2-pg2-v8:~#
+
+5.
+
+root@eltex-practice2-pg2-v8:~# gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations on this host? SSH
+? Upload your SSH public key to your GitHub account? /root/.ssh/particsh.pub
+? Title for your SSH key: eltex-practice2-pg2-v8
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+! First copy your one-time code: AA67-7EF3
+Press Enter to open github.com in your browser...
+! Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+✓ Uploaded the SSH key to your GitHub account: /root/.ssh/particsh.pub
+✓ Logged in as particsh
+
+6-7.
+
+root@eltex-practice2-pg2-v8:~# gh auth setup-git --hostname github.com
+root@eltex-practice2-pg2-v8:~# gh auth status
+github.com
+  ✓ Logged in to github.com account particsh (/root/.config/gh/hosts.yml)
+  - Active account: true
+  - Git operations protocol: ssh
+  - Token: gho_************************************
+  - Token scopes: 'admin:public_key', 'gist', 'read:org', 'repo'
+
+8.
+
+root@eltex-practice2-pg2-v8:~# gh repo create --public eltex_module1
+✓ Created repository particsh/eltex_module1 on GitHub
+  https://github.com/particsh/eltex_module1
+
+
+9.
+
+root@eltex-practice2-pg2-v8:~# mkdir ~/eltex_module1 && cd ~/eltex_module1
+root@eltex-practice2-pg2-v8:~/eltex_module1# git init
+Initialized empty Git repository in /root/eltex_module1/.git/
+root@eltex-practice2-pg2-v8:~/eltex_module1# git add README.md
+fatal: pathspec 'README.md' did not match any files
+root@eltex-practice2-pg2-v8:~/eltex_module1# git init
+Reinitialized existing Git repository in /root/eltex_module1/.git/
+root@eltex-practice2-pg2-v8:~/eltex_module1# echo "# eltex module1" >> README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1# git add README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1# git commit -m "first commit"
+[main (root-commit) 59e21f6] first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1# git branch -M main
+root@eltex-practice2-pg2-v8:~/eltex_module1# git remote add origin https://github.com/particsh/eltex_module1.git
+root@eltex-practice2-pg2-v8:~/eltex_module1# git status
+On branch main
+nothing to commit, working tree clean
+root@eltex-practice2-pg2-v8:~/eltex_module1# git push -u origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 237 bytes | 237.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/particsh/eltex_module1.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+root@eltex-practice2-pg2-v8:~/eltex_module1# mkdir -p module1/task1
+root@eltex-practice2-pg2-v8:~/eltex_module1# mkdir -p module1/task2
+root@eltex-practice2-pg2-v8:~/eltex_module1# mkdir -p module1/task3
+
+PS C:\Users\particsh\Downloads> scp -P 44556 '.\otchet_1 (1).pdf' eltex-pg2-v8@217.71.138.1:~
+The authenticity of host '[217.71.138.1]:44556 ([217.71.138.1]:44556)' can't be established.
+ED25519 key fingerprint is SHA256:9EeAnPIp/wDj41XS55iG0Eff5a90ZLW9TTAI37NiBb0.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+Warning: Permanently added '[217.71.138.1]:44556' (ED25519) to the list of known hosts.
+eltex-pg2-v8@217.71.138.1's password:
+otchet_1 (1).pdf                                                                      100%  986KB   2.7MB/s   00:00
+PS C:\Users\particsh\Downloads>
+
+
+eltex-pg2-v8@eltex-2026-spring:~$ scp otchet_1.pdf root@172.16.9.208:~
+otchet_1.pdf                                  100%  986KB 144.1MB/s   00:00
+eltex-pg2-v8@eltex-2026-spring:~$
+
+eltex-pg2-v8@eltex-2026-spring:~$ scp eltex-pg2-v8_part.log eltex-pg2-v8_part3.log eltex-pg2-v8_part3_gt50M.log root@172.16.9.208:~
+eltex-pg2-v8_part.log                                                                                                                                                                                      100%  476     1.2MB/s   00:00
+eltex-pg2-v8_part3.log                                                                                                                                                                                     100%  464     1.3MB/s   00:00
+eltex-pg2-v8_part3_gt50M.log                                                                                                                                                                               100%  533     1.8MB/s   00:00
+
+
+root@eltex-practice2-pg2-v8:~/eltex_module1# cp ../eltex-pg2-v8_part.log ../eltex-pg2-v8_part3.log ../eltex-pg2-v8_part3_gt50M.log ./module1/task1
+root@eltex-practice2-pg2-v8:~/eltex_module1# ls
+module1  README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1# ls module1/task1
+eltex-pg2-v8_part3_gt50M.log  eltex-pg2-v8_part3.log  eltex-pg2-v8_part.log  otchet_1.pdf
+root@eltex-practice2-pg2-v8:~/eltex_module1# git add
+Nothing specified, nothing added.
+hint: Maybe you wanted to say 'git add .'?
+hint: Turn this message off by running
+hint: "git config advice.addEmptyPathspec false"
+root@eltex-practice2-pg2-v8:~/eltex_module1# git add *
+root@eltex-practice2-pg2-v8:~/eltex_module1# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   module1/task1/eltex-pg2-v8_part.log
+        new file:   module1/task1/eltex-pg2-v8_part3.log
+        new file:   module1/task1/eltex-pg2-v8_part3_gt50M.log
+        new file:   module1/task1/otchet_1.pdf
+
+root@eltex-practice2-pg2-v8:~/eltex_module1# git commit -m "task1"
+[main d2a3dda] task1
+ 4 files changed, 60 insertions(+)
+ create mode 100644 module1/task1/eltex-pg2-v8_part.log
+ create mode 100644 module1/task1/eltex-pg2-v8_part3.log
+ create mode 100644 module1/task1/eltex-pg2-v8_part3_gt50M.log
+ create mode 100644 module1/task1/otchet_1.pdf
+root@eltex-practice2-pg2-v8:~/eltex_module1# git push
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (8/8), 877.54 KiB | 31.34 MiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/particsh/eltex_module1.git
+   59e21f6..d2a3dda  main -> main
+
+10. 
+
+root@eltex-practice2-pg2-v8:~# mkdir ~/eltex_module1_clone && cd eltex_module1_clone/
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone#
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# git clone https://github.com/particsh/eltex_module1.git .
+Cloning into '.'...
+remote: Enumerating objects: 14, done.
+remote: Counting objects: 100% (14/14), done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 14 (delta 0), reused 14 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (14/14), 878.01 KiB | 1.78 MiB/s, done.
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# ls
+module1  README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone#
+
+
+
+11.
+
+root@eltex-practice2-pg2-v8:~/eltex_module1# echo "Hallo again" >> README.md
+root@eltex-practice2-pg2-v8:~/eltex_module1# git add *
+root@eltex-practice2-pg2-v8:~/eltex_module1# git commit -m "For task 11"
+[main d7f7c33] For task 11
+ 1 file changed, 1 insertion(+)
+root@eltex-practice2-pg2-v8:~/eltex_module1# git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 313 bytes | 313.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/particsh/eltex_module1.git
+   fa2794d..d7f7c33  main -> main
+root@eltex-practice2-pg2-v8:~/eltex_module1#
+
+root@eltex-practice2-pg2-v8:~/eltex_module1# cd ..
+root@eltex-practice2-pg2-v8:~# cd eltex_module1_clone/
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# git fetch
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (3/3), 293 bytes | 293.00 KiB/s, done.
+From https://github.com/particsh/eltex_module1
+   fa2794d..d7f7c33  main       -> origin/main
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# git log origin/main
+commit d7f7c334d0639f1687b3fb40f8358901f7870765 (origin/main, origin/HEAD)
+Author: particsh <maxim.plotnitskiyreborn@gmail.com>
+Date:   Sat Mar 14 14:18:31 2026 +0000
+
+    For task 11
+
+commit fa2794db4734bdbfb06fa1ffe313fdad1336616a (HEAD -> main)
+Author: particsh <maxim.plotnitskiyreborn@gmail.com>
+Date:   Fri Mar 13 12:34:11 2026 +0000
+
+    second commit
+
+commit d2a3ddae25c6aa81198d73d9ec99e820aaae5d71
+Author: particsh <maxim.plotnitskiyreborn@gmail.com>
+Date:   Fri Mar 13 12:26:17 2026 +0000
+
+    task1
+
+commit 59e21f659043571d42645777001810b6d463d969
+Author: particsh <maxim.plotnitskiyreborn@gmail.com>
+Date:   Fri Mar 13 12:08:40 2026 +0000
+
+    first commit
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# git diff main origin/main
+diff --git a/README.md b/README.md
+index 9215174..2722c94 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,3 @@
+ # eltex module1
+ Hallo
++Hallo again
+root@eltex-practice2-pg2-v8:~/eltex_module1_clone# git merge
+Updating fa2794d..d7f7c33
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
