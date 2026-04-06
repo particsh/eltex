@@ -20,7 +20,7 @@ int del_person(Person* target, int size);
 int add_person(Person* target, int size);
 int edit_person(Person* target, int size);
 int check_person(Person* target, int size);
-int check_actual_size(Person* target, int size)
+int check_actual_size(Person* target, int size);
 
 
 #endif
