@@ -1,12 +1,12 @@
 #include "header.h"
 
-void menu(Person* target, int size){
+void menu(Person* target, int size) {
     int flag = 1;
     int choice = 0;
-    while (flag){
+    while (flag) {
         printf("Выберите опцию\n1. Добавить контакт\n2. Редактировать контакт\n3. Удалить контакт\n4. Посмотреть контакт\n5. Выход из меню\n");
-        scanf("%d", &choice);
-        switch(choice){
+        choice = safe_read_int("Выберите опцию: ");
+        switch (choice) {
             case 1:
                 add_person(target, size);
                 break;
@@ -24,125 +24,332 @@ void menu(Person* target, int size){
                 break;
             default:
                 printf("Неверный выбор\n");
-
         }
     }
-
 }
 
-int del_person(Person* target, int size){
-    int flag = 0;
-    if (target == NULL){
-        flag = 1;
+int del_person(Person* target, int size) {
+    if (target == NULL) {
         printf("Ошибка: указатель ведет на NULL\n");
+        return 1;
     }
-    return flag;
+
+    int actual_size = check_actual_size(target, size);
+    if (actual_size == 0) {
+        printf("Список контактов пуст, удалять нечего.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < actual_size; i++) {
+        printf("%d. %s %s\n", i + 1, target[i].FirstName, target[i].LastName);
+    }
+
+    int choice = safe_read_int("Выберите по номеру цель для удаления: ");
+    if (choice < 1 || choice > actual_size) {
+        printf("Неверный номер контакта.\n");
+        return 1;
+    }
+
+    int idx = choice - 1;
+    memset(&target[idx], 0, sizeof(Person));
+
+    printf("Контакт успешно удалён.\n");
+    return 0;
 }
+
 int add_person(Person* target, int size) {
     if (target == NULL) {
         printf("Ошибка: указатель ведет на NULL\n");
         return 1;
     }
-    int actual = check_actual_size(target, size);
-    if (actual == size) {
+    int position = find_first_free(target, size);
+    if (position == -1) {
         printf("Ошибка: список контактов полностью заполнен\n");
         return 1;
     }
-    int position = actual;
 
-    printf("Введите имя контакта\n");
-    scanf("%19s", target[position].FirstName);
+    safe_read_string(target[position].FirstName, MAX_NAME_LEN, "Введите имя контакта: ");
+    safe_read_string(target[position].LastName, MAX_NAME_LEN, "Введите фамилию контакта: ");
 
-    printf("Введите фамилию контакта\n");
-    scanf("%19s", target[position].LastName);
-
-    printf("Вы хотите дальше заполнять поля контакта? Д/н\n");
     char choice;
-    scanf("%c", &choice);
+    printf("Вы хотите дальше заполнять поля контакта? (y/n): ");
+    scanf(" %c", &choice);
+    while (getchar() != '\n');
 
-    if (choice == "д" || choice == "Д") {
-        printf("Введите отчество контакта\n");
-        scanf("%19s", target[position].Patronymic);
+    if (choice == 'y' || choice == 'Y') {
+        safe_read_string(target[position].Patronymic, MAX_NAME_LEN, "Введите отчество контакта: ");
+        safe_read_string(target[position].PlaceOfWork, MAX_WORK_LEN, "Введите место работы контакта: ");
 
-        printf("Введите место работы контакта\n");
-        scanf("%29s", target[position].PlaceOfWork);
-
-        printf("Введите почты контакта, пустая строка - закончить\n");
-        char tmp[60];
         int flag = 1;
-        for (int i = 0; i < 10 && flag; i++){
-            scanf("%59s", tmp);
-            if (tmp[0] != '\n'){
-                stpcpy(target[position].Emails[i], tmp);
-            } else{
+        printf("Введите почты контакта (до %d), пустая строка - закончить\n", MAX_EMAILS);
+        for (int i = 0; i < MAX_EMAILS && flag; i++) {
+            char tmp[MAX_EMAIL_LEN];
+            printf("Email %d: ", i + 1);
+            if (fgets(tmp, sizeof(tmp), stdin) == NULL) break;
+            size_t len = strlen(tmp);
+            if (len > 0 && tmp[len - 1] == '\n')
+                tmp[len - 1] = '\0';
+            else {
+                int ch;
+                while ((ch = getchar()) != '\n' && ch != EOF);
+            }
+            if (tmp[0] == '\0') {
                 flag = 0;
+            } else {
+                strcpy(target[position].Emails[i], tmp);
             }
         }
 
-        printf("Введите номера телефона контакта, пустая строка - закончить\n");
+        printf("Введите номера телефона контакта (до %d), пустая строка - закончить\n", MAX_PHONES);
         flag = 1;
-
-        for (int i = 0; i < 10 && flag; i++){
-            scanf("%59s", tmp);
-            if (tmp[0] != '\n'){
-                stpcpy(target[position].NumbersOfPhone[i], tmp);
-            } else{
+        for (int i = 0; i < MAX_PHONES && flag; i++) {
+            char tmp[MAX_PHONE_LEN];
+            printf("Телефон %d: ", i + 1);
+            if (fgets(tmp, sizeof(tmp), stdin) == NULL) break;
+            size_t len = strlen(tmp);
+            if (len > 0 && tmp[len - 1] == '\n')
+                tmp[len - 1] = '\0';
+            else {
+                int ch;
+                while ((ch = getchar()) != '\n' && ch != EOF);
+            }
+            if (tmp[0] == '\0') {
                 flag = 0;
+            } else {
+                strcpy(target[position].NumbersOfPhone[i], tmp);
             }
         }
 
-        printf("Введите ссылки на соцсети контакта, пустая строка - закончить\n");
+        printf("Введите ссылки на соцсети контакта (до %d), пустая строка - закончить\n", MAX_LINKS);
         flag = 1;
-        for (int i = 0; i < 10 && flag; i++){
-            scanf("%59s", tmp);
-            if (tmp[0] != '\n'){
-                stpcpy(target[position].LinksSocialNetwork[i], tmp);
-            } else{
+        for (int i = 0; i < MAX_LINKS && flag; i++) {
+            char tmp[MAX_LINK_LEN];
+            printf("Соцсеть %d: ", i + 1);
+            if (fgets(tmp, sizeof(tmp), stdin) == NULL) break;
+            size_t len = strlen(tmp);
+            if (len > 0 && tmp[len - 1] == '\n')
+                tmp[len - 1] = '\0';
+            else {
+                int ch;
+                while ((ch = getchar()) != '\n' && ch != EOF);
+            }
+            if (tmp[0] == '\0') {
                 flag = 0;
+            } else {
+                strcpy(target[position].LinksSocialNetwork[i], tmp);
             }
         }
     }
     return 0;
 }
-int edit_person(Person* target, int size){
+
+int edit_person(Person* target, int size) {
     int flag = 0;
-    if (target == NULL){
+    if (target == NULL) {
         flag = 1;
         printf("Ошибка: указатель ведет на NULL\n");
+        return flag;
     }
+
     int actual_size = check_actual_size(target, size);
-    for (int i = 0; i < actual_size; i++){
+    if (actual_size == 0) {
+        printf("Список контактов пуст.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < actual_size; i++) {
         printf("%d. %s %s\n", i + 1, target[i].FirstName, target[i].LastName);
     }
-    printf("Выберите по номеру цель для редактирования");
-    int choice;
-    scanf("%d", &choice);
-    
 
+    int choice = safe_read_int("Выберите по номеру цель для редактирования: ");
+    if (choice < 1 || choice > actual_size) {
+        printf("Неверный номер контакта.\n");
+        return 1;
+    }
+    int idx = choice - 1;
+
+    printf("1. Имя\n2. Фамилия\n3. Отчество\n4. Место работы\n5. Адреса электронной почты\n6. Номера телефонов\n7. Ссылки на соцсети\n");
+    choice = safe_read_int("Выберите по номеру поле для редактирования: ");
+    switch (choice) {
+        case 1:
+            safe_read_string(target[idx].FirstName, MAX_NAME_LEN, "Введите новое значение для имени: ");
+            break;
+        case 2:
+            safe_read_string(target[idx].LastName, MAX_NAME_LEN, "Введите новое значение для фамилии: ");
+            break;
+        case 3:
+            safe_read_string(target[idx].Patronymic, MAX_NAME_LEN, "Введите новое значение для отчества: ");
+            break;
+        case 4:
+            safe_read_string(target[idx].PlaceOfWork, MAX_WORK_LEN, "Введите новое значение для места работы: ");
+            break;
+        case 5: {
+            int email_count = 0;
+            while (email_count < MAX_EMAILS && target[idx].Emails[email_count][0] != '\0')
+                email_count++;
+            if (email_count == 0) {
+                printf("Нет адресов электронной почты для редактирования.\n");
+                break;
+            }
+            printf("Адреса электронной почты:\n");
+            for (int i = 0; i < email_count; i++)
+                printf("%d. %s\n", i + 1, target[idx].Emails[i]);
+
+            int email_choice = safe_read_int("Выберите номер поля для редактирования: ");
+            if (email_choice < 1 || email_choice > email_count) {
+                printf("Неверный номер.\n");
+                break;
+            }
+            safe_read_string(target[idx].Emails[email_choice - 1], MAX_EMAIL_LEN, "Введите новое значение для адреса электронной почты: ");
+            break;
+        }
+        case 6: {
+            int phone_count = 0;
+            while (phone_count < MAX_PHONES && target[idx].NumbersOfPhone[phone_count][0] != '\0')
+                phone_count++;
+            if (phone_count == 0) {
+                printf("Нет номеров телефонов для редактирования.\n");
+                break;
+            }
+            printf("Номера телефонов:\n");
+            for (int i = 0; i < phone_count; i++)
+                printf("%d. %s\n", i + 1, target[idx].NumbersOfPhone[i]);
+
+            int phone_choice = safe_read_int("Выберите номер поля для редактирования: ");
+            if (phone_choice < 1 || phone_choice > phone_count) {
+                printf("Неверный номер.\n");
+                break;
+            }
+            safe_read_string(target[idx].NumbersOfPhone[phone_choice - 1], MAX_PHONE_LEN, "Введите новое значение для телефона: ");
+            break;
+        }
+        case 7: {
+            int link_count = 0;
+            while (link_count < MAX_LINKS && target[idx].LinksSocialNetwork[link_count][0] != '\0')
+                link_count++;
+            if (link_count == 0) {
+                printf("Нет ссылок на соцсети для редактирования.\n");
+                break;
+            }
+            printf("Ссылки на соцсети:\n");
+            for (int i = 0; i < link_count; i++)
+                printf("%d. %s\n", i + 1, target[idx].LinksSocialNetwork[i]);
+
+            int link_choice = safe_read_int("Выберите номер поля для редактирования: ");
+            if (link_choice < 1 || link_choice > link_count) {
+                printf("Неверный номер.\n");
+                break;
+            }
+            safe_read_string(target[idx].LinksSocialNetwork[link_choice - 1], MAX_LINK_LEN, "Введите новое значение для ссылки на соцсеть: ");
+            break;
+        }
+        default:
+            printf("Неверный выбор\n");
+            flag = 1;
+    }
     return flag;
 }
 
-int check_person(Person* target, int size, int position){
-    int flag = 0;
-    if (target == NULL){
-        flag = 1;
+int check_person(Person* target, int size) {
+    if (target == NULL) {
         printf("Ошибка: указатель ведет на NULL\n");
+        return 1;
+    }
+    int actual_size = check_actual_size(target, size);
+    if (actual_size == 0) {
+        printf("Список контактов пуст.\n");
+        return 0;
     }
 
-    return flag;
+    for (int i = 0; i < actual_size; i++) {
+        printf("%d. %s %s\n", i + 1, target[i].FirstName, target[i].LastName);
+    }
+
+    int choice = safe_read_int("Выберите по номеру цель для просмотра: ");
+    if (choice < 1 || choice > actual_size) {
+        printf("Неверный номер контакта.\n");
+        return 1;
+    }
+    int idx = choice - 1;
+
+    printf("Имя: %s\n", target[idx].FirstName);
+    printf("Фамилия: %s\n", target[idx].LastName);
+    if (target[idx].Patronymic[0] != '\0')
+        printf("Отчество: %s\n", target[idx].Patronymic);
+    if (target[idx].PlaceOfWork[0] != '\0')
+        printf("Место работы: %s\n", target[idx].PlaceOfWork);
+
+    printf("Адреса электронной почты:\n");
+    for (int i = 0; i < MAX_EMAILS; i++) {
+        if (target[idx].Emails[i][0] == '\0')
+            break;
+        printf("%d. %s\n", i + 1, target[idx].Emails[i]);
+    }
+
+    printf("Номера телефонов:\n");
+    for (int i = 0; i < MAX_PHONES; i++) {
+        if (target[idx].NumbersOfPhone[i][0] == '\0')
+            break;
+        printf("%d. %s\n", i + 1, target[idx].NumbersOfPhone[i]);
+    }
+
+    printf("Ссылки на соцсети:\n");
+    for (int i = 0; i < MAX_LINKS; i++) {
+        if (target[idx].LinksSocialNetwork[i][0] == '\0')
+            break;
+        printf("%d. %s\n", i + 1, target[idx].LinksSocialNetwork[i]);
+    }
+
+    return 0;
 }
 
-int check_actual_size(Person* target, int size){
+int check_actual_size(Person* target, int size) {
     int actual_size = 0;
-    if (target == NULL){
+    if (target == NULL) {
         printf("Ошибка: указатель ведет на NULL\n");
-    } else{
-        for (int i = 0; i < size; i++){
-            if (target[i].FirstName[0] != '\0'){
+    } else {
+        for (int i = 0; i < size; i++) {
+            if (target[i].FirstName[0] != '\0') {
                 actual_size++;
             }
         }
     }
-    
     return actual_size;
+}
+
+int find_first_free(Person* target, int size) {
+    for (int i = 0; i < size; i++) {
+        if (target[i].FirstName[0] == '\0')
+            return i;
+    }
+    return -1;
+}
+
+int safe_read_int(char *prompt) {
+    int value;
+    while (1) {
+        printf("%s", prompt);
+        if (scanf("%d", &value) == 1) {
+            while (getchar() != '\n'); 
+            return value;
+        }
+        printf("Ошибка ввода. Введите целое число.\n");
+        while (getchar() != '\n');      
+    }
+}
+
+void safe_read_string(char *buffer, int max_len, char *prompt) {
+    printf("%s", prompt);
+    if (fgets(buffer, max_len, stdin) == NULL) {
+        buffer[0] = '\0';
+        return;
+    }
+    size_t len = strlen(buffer);
+    if (len > 0 && buffer[len - 1] == '\n')
+        buffer[len - 1] = '\0';
+    else {
+
+        int ch;
+        while ((ch = getchar()) != '\n' && ch != EOF);
+    }
 }
