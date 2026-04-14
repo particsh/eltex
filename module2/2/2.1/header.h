@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// дефайны для статических массивов
+
 #define MAX_CONTACTS 10
 #define MAX_NAME_LEN 20
 #define MAX_WORK_LEN 30
@@ -13,6 +15,8 @@
 #define MAX_EMAILS 10
 #define MAX_PHONES 10
 #define MAX_LINKS 10
+
+// структура для одного человека
 
 typedef struct person {
   char FirstName[MAX_NAME_LEN];
@@ -24,15 +28,15 @@ typedef struct person {
   char LinksSocialNetwork[MAX_LINKS][MAX_LINK_LEN];
 } Person;
 
-void menu(Person *target, int size);
+void menu(Person *target, int size); // менюшка
 
-int del_person(Person *target, int size);
-int add_person(Person *target, int size);
-int edit_person(Person *target, int size);
-int check_person(Person *target, int size);
-int check_actual_size(Person *target, int size);
-int find_first_free(Person *target, int size);
-int safe_read_int(char *prompt);
-void safe_read_string(char *buffer, int max_len, char *prompt);
+int del_person(Person *target, int size); // удаление человека из списка
+int add_person(Person *target, int size); // добавление человека из списка
+int edit_person(Person *target, int size); // редактор человека из списка
+int check_person(Person *target, int size); // просмотр человека из списка
+int check_actual_size(Person *target, int size); // актуальный размер массива
+int find_first_free(Person *target, int size); // первая свободная ячейка в массиве
+int safe_read_int(char *prompt); // безопасное чтение целого числа + сообщение
+void safe_read_string(char *buffer, int max_len, char *prompt); // безопасное чтение строки + сообщение
 
 #endif

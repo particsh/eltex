@@ -1,10 +1,12 @@
 #include "header.h"
 
+// менюшка
+
 void menu(Person *target, int size) {
   int flag = 1;
   int choice = 0;
   while (flag) {
-    printf("Выберите опцию\n1. Добавить контакт\n2. Редактировать контакт\n3. "
+    printf("*Книга контактов*\nВыберите опцию\n1. Добавить контакт\n2. Редактировать контакт\n3. "
            "Удалить контакт\n4. Посмотреть контакт\n5. Выход из меню\n");
     choice = safe_read_int("Выберите опцию: ");
     switch (choice) {
@@ -29,41 +31,61 @@ void menu(Person *target, int size) {
   }
 }
 
+// удаление человека из списка
+
 int del_person(Person *target, int size) {
+
+  // проверка указателя
+
   if (target == NULL) {
     printf("Ошибка: указатель ведет на NULL\n");
     return 1;
   }
 
-  int actual_size = check_actual_size(target, size);
+  int actual_size = check_actual_size(target, size); // текущий размер
+
+  // проверка на пустоту
   if (actual_size == 0) {
     printf("Список контактов пуст, удалять нечего.\n");
     return 1;
   }
 
+  // вывод доступных контактов
   for (int i = 0; i < actual_size; i++) {
     printf("%d. %s %s\n", i + 1, target[i].FirstName, target[i].LastName);
   }
 
   int choice = safe_read_int("Выберите по номеру цель для удаления: ");
+
+  // проверка выбора на выход за пределы
   if (choice < 1 || choice > actual_size) {
     printf("Неверный номер контакта.\n");
     return 1;
   }
 
-  int idx = choice - 1;
-  memset(&target[idx], 0, sizeof(Person));
+  int idx = choice - 1; // смещение на единицу
+  memset(&target[idx], 0, sizeof(Person)); // зануление памяти по указателю
 
   printf("Контакт успешно удалён.\n");
   return 0;
 }
 
+
+// добавление человека из списка
+
 int add_person(Person *target, int size) {
+
+  // проверка указателя
+  
   if (target == NULL) {
     printf("Ошибка: указатель ведет на NULL\n");
     return 1;
   }
+
+  // первая свободная ячейка
   int position = find_first_free(target, size);
+
+  // книга полностью заполнена
   if (position == -1) {
     printf("Ошибка: список контактов полностью заполнен\n");
     return 1;
@@ -77,8 +99,7 @@ int add_person(Person *target, int size) {
   char choice;
   printf("Вы хотите дальше заполнять поля контакта? (y/n): ");
   scanf(" %c", &choice);
-  while (getchar() != '\n')
-    ;
+  while (getchar() != '\n'); // очистка буффера
 
   if (choice == 'y' || choice == 'Y') {
     safe_read_string(target[position].Patronymic, MAX_NAME_LEN,
@@ -99,8 +120,7 @@ int add_person(Person *target, int size) {
         tmp[len - 1] = '\0';
       else {
         int ch;
-        while ((ch = getchar()) != '\n' && ch != EOF)
-          ;
+        while ((ch = getchar()) != '\n' && ch != EOF);
       }
       if (tmp[0] == '\0') {
         flag = 0;
@@ -160,12 +180,18 @@ int add_person(Person *target, int size) {
   return 0;
 }
 
+// редактор человека из списка
+
 int edit_person(Person *target, int size) {
+
+  // проверка указателя
+  
   if (target == NULL) {
     printf("Ошибка: указатель ведет на NULL\n");
     return 1;
   }
 
+  // проверка на пустоту
   int actual_size = check_actual_size(target, size);
   if (actual_size == 0) {
     printf("Список контактов пуст.\n");
@@ -279,7 +305,12 @@ int edit_person(Person *target, int size) {
   return 0;
 }
 
+// просмотр человека из списка
+
 int check_person(Person *target, int size) {
+
+  // проверка указателя
+  
   if (target == NULL) {
     printf("Ошибка: указатель ведет на NULL\n");
     return 1;
@@ -332,6 +363,8 @@ int check_person(Person *target, int size) {
   return 0;
 }
 
+// актуальный размер массива
+
 int check_actual_size(Person *target, int size) {
   int actual_size = 0;
   if (target == NULL) {
@@ -346,6 +379,8 @@ int check_actual_size(Person *target, int size) {
   return actual_size;
 }
 
+// поиск первого свободной ячейки в массиве
+
 int find_first_free(Person *target, int size) {
   for (int i = 0; i < size; i++) {
     if (target[i].FirstName[0] == '\0')
@@ -354,34 +389,36 @@ int find_first_free(Person *target, int size) {
   return -1;
 }
 
+// Безопасаное чтение целого числа
+
 int safe_read_int(char *prompt) {
   int value;
   while (1) {
     printf("%s", prompt);
     if (scanf("%d", &value) == 1) {
-      while (getchar() != '\n')
+      while (getchar() != '\n') // очистка буффера
         ;
       return value;
     }
     printf("Ошибка ввода. Введите целое число.\n");
-    while (getchar() != '\n')
+    while (getchar() != '\n') // очистка буффера
       ;
   }
 }
 
+// Безопасное чтение строки с огранинной длиной + сообщение
+
 void safe_read_string(char *buffer, int max_len, char *prompt) {
   printf("%s", prompt);
   if (fgets(buffer, max_len, stdin) == NULL) {
-    buffer[0] = '\0';
+    buffer[0] = '\0'; // вставка нуль символа в случае ошибки
     return;
   }
   size_t len = strlen(buffer);
-  if (len > 0 && buffer[len - 1] == '\n')
-    buffer[len - 1] = '\0';
+  if (len > 0 && buffer[len - 1] == '\n') // проверка на пустоту
+    buffer[len - 1] = '\0'; // вставка нуль символа в конец
   else {
-
     int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      ;
+    while ((ch = getchar()) != '\n' && ch != EOF); // очистка буффера
   }
 }

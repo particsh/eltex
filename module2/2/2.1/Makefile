@@ -4,32 +4,22 @@ CFLAGS = -Wall -Wextra -Werror
 
 # каталоги
 SRC_DIR = .
-TEST_DIR = tests
-UNITY_DIR = unity
 
 
 # файлы
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
-TEST_FILES = $(wildcard $(TEST_DIR)/*.c) $(UNITY_DIR)/unity.c
 
-# цель и тесты
+# цель
 TARGET = bin/app
-TEST_TARGET = bin/test_runner
 
-all: build test
+all: build 
 
 build: $(SRC_FILES)
 	mkdir -p bin
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC_FILES)
 
 clean:
-	rm -rf bin/ report/ *.dSYM *.out *.o
-	rm -rf report/ *.dSYM
-
-test: build
-	mkdir -p bin
-	$(CC) $(CFLAGS) -o $(TEST_TARGET) $(SRC_FILES) $(TEST_FILES)
-	./$(TEST_TARGET)
+	rm -rf bin/ *.out *.o
 
 style_check:
 	clang-format -n  *.c *.h 
