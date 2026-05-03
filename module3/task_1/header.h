@@ -6,10 +6,17 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+
+
+// умножение на два 
 double multiplication_by_2(double number);
 
-int scan_input(char *string, double * value);
 
+// обработка ввода
+int scan_input(char *string, double *value);
+
+
+// разделение задач
 int separtions_tasks(int argc, char *argv[]);
 
 

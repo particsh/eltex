@@ -9,7 +9,6 @@ UNITY_DIR = unity
 
 
 # файлы
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c) $(UNITY_DIR)/unity.c
 
 # цель и тесты
@@ -18,9 +17,10 @@ TEST_TARGET = bin/test_runner
 
 all: build test
 
-build: $(SRC_FILES)
+build:
 	mkdir -p bin
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC_FILES)
+	$(CC) $(CFLAGS) -o bin/program1 program1.c
+	$(CC) $(CFLAGS) -o bin/program2 program2.c
 
 clean:
 	rm -rf bin/ report/ *.dSYM *.out *.o
