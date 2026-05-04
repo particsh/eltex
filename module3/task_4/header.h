@@ -1,6 +1,8 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
+#define _GNU_SOURCE
+
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
@@ -30,6 +32,8 @@ typedef struct Pipeline{
 
 int separate_command(char* input, Command *cmd); // разбираем комманду
 int separate_pipeline(char* input, Pipeline *pl); // разбираем пайплайн
+int do_pipeline(Pipeline pl); // выполнение пайплана
+void free_pipeline(Pipeline *pl); // очистка пайплайна
 
 
 
