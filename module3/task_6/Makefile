@@ -13,14 +13,16 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c) $(UNITY_DIR)/unity.c
 
 # цель и тесты
-TARGET = bin/app
+TARGET1 = bin/server
+TARGET2 = bin/client
 TEST_TARGET = bin/test_runner
 
 all: build test
 
 build: $(SRC_FILES)
 	mkdir -p bin
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC_FILES)
+	$(CC) $(CFLAGS) -o $(TARGET1) server.c source.c
+	$(CC) $(CFLAGS) -o $(TARGET2) client.c source.c
 
 clean:
 	rm -rf bin/ report/ *.dSYM *.out *.o

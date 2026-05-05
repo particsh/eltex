@@ -1,6 +1,8 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
+#define _POSIX_C_SOURCE 199309L
+
 
 // 
 #include <stdio.h>
@@ -11,6 +13,9 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+
+#include <unistd.h> 
+#include <signal.h>
 
 typedef struct msgbuf {
     long mtype;
