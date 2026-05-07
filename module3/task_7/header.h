@@ -6,8 +6,10 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 void safe_read_string(char *buffer, int max_len, char *prompt); // безопасное чтение строки + сообщение
+void cycle(char* name_sender, char* name_receive, int flag); // основной цикл программы
 
 #endif
