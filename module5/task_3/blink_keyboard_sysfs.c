@@ -22,7 +22,7 @@ struct tty_driver *my_driver;;
 static int led_mask = 0;
 #define BLINK_DELAY   HZ/5
 #define RESTORE_LEDS  0xFF
-#define FILE_NAME "sys_communicate"
+#define DIR_NAME "sys_communicate"
 
 static void my_timer_func(struct timer_list *ptr)
 {
@@ -71,7 +71,7 @@ static int __init blink_keyboard_sysfs_init(void){
  
         pr_debug("Module initialized successfully \n");
  
-        example_kobject = kobject_create_and_add(FILE_NAME,
+        example_kobject = kobject_create_and_add(DIR_NAME,
                                                  kernel_kobj);
         if(!example_kobject)
                 return -ENOMEM;
