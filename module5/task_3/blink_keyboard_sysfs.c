@@ -10,7 +10,7 @@
 #include <linux/kobject.h> 
 #include <linux/sysfs.h> 
 
-MODULE_LICENSE("SUPER LICENSE OF PARTICSH");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Плотницкий Максим");
 MODULE_DESCRIPTION("blink keyboard by write in file");
 
@@ -92,7 +92,7 @@ static int __init blink_keyboard_sysfs_init(void){
         }
         printk(KERN_INFO "kbleds: finished scanning consoles\n");
         my_driver = vc_cons[fg_console].d->port.tty->driver;
-        printk(KERN_INFO "kbleds: tty driver magic %x\n", my_driver->magic);
+        printk(KERN_INFO "kbleds: tty driver found\n");
 
         return error;
 
