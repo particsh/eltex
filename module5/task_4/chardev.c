@@ -32,7 +32,7 @@ enum {
 
 static atomic_t already_open = ATOMIC_INIT(CDEV_NOT_USED);  // состояние файл
 static char msg[BUF_LEN]; // буффер
-static struct class *cls; // 
+static struct class *cls; 
 static short readPos = 0; // позиция в файле
 
 // функции для взамодействия с файлом
@@ -86,7 +86,7 @@ static void __exit chardev_exit(void){
 
 // открытие модуля
 static int device_open(struct inode *inode, struct file *file){ 
-    static int counter = 1; 
+    static int counter = 0; 
     // чтобы только один процесс одновременно имел доступ к драйверу
     if (atomic_cmpxchg(&already_open, CDEV_NOT_USED, CDEV_EXCLUSIVE_OPEN)) 
         return -EBUSY; 
@@ -120,14 +120,10 @@ static ssize_t device_read(struct file *filp,
 // запись
 static ssize_t device_write(struct file *filp, const char __user *buff, 
                             size_t len, loff_t *off){ 
-    short count = 0;
-    short ind;          
-    char kernel_buf[BUF_LEN] = {0};
-
     if (len > BUF_LEN - 1)      
         len = BUF_LEN - 1;
 
-    if (copy_from_user(kernel_buf, buff, len)) {
+    if (copy_from_user(msg, buff, len)) {
         return -EFAULT;
     }
 
