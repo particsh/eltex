@@ -130,7 +130,7 @@ static ssize_t device_write(struct file *filp, const char __user *buff,
     msg[len] = '\0'; 
     readPos = 0;
 
-    return count;
+    return len;
  
 } 
  
