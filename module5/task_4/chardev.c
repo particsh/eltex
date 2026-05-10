@@ -34,7 +34,8 @@ enum {
 /* Is device open? Used to prevent multiple access to device */ 
 static atomic_t already_open = ATOMIC_INIT(CDEV_NOT_USED); 
 static char msg[BUF_LEN]; /* The msg the device will give when asked */ 
-static struct class *cls; 
+static struct class *cls;
+static short readPos = 0;
 static struct file_operations chardev_fops = { 
     .read = device_read, 
     .write = device_write, 
@@ -51,7 +52,7 @@ static int __init chardev_init(void) {
     } 
     pr_info("I was assigned major number %d.\n", major); 
  
-    cls = class_create(THIS_MODULE, DEVICE_NAME); 
+    cls = class_create(DEVICE_NAME); 
     device_create(cls, NULL, MKDEV(major, 0), NULL, DEVICE_NAME); 
     pr_info("Device created on /dev/%s\n", DEVICE_NAME); 
     return SUCCESS; 
@@ -75,7 +76,7 @@ static int device_open(struct inode *inode, struct file *file){
     if (atomic_cmpxchg(&already_open, CDEV_NOT_USED, CDEV_EXCLUSIVE_OPEN)) 
         return -EBUSY; 
  
-    sprintf(msg, "I already told you %d times Hello world!\n", counter++); 
+    printk(KERN_ALERT "I already told you %d times Hello world!\n", counter++); 
     try_module_get(THIS_MODULE); 
     return SUCCESS; 
 } 
@@ -98,26 +99,18 @@ static ssize_t device_read(struct file *filp, /* see include/linux/fs.h   */
                            char __user *buffer, /* buffer to fill with data */ 
                            size_t length, /* length of the buffer     */ 
                            loff_t *offset) { /* Number of bytes actually written to the buffer */ 
-    int bytes_read = 0; 
-    const char *msg_ptr = msg; 
-    if (!*(msg_ptr + *offset)) { /* we are at the end of message */ 
-        *offset = 0; /* reset the offset */ 
-        return 0; /* signify end of file */ 
-    } 
-    msg_ptr += *offset; 
-    /* Actually put the data into the buffer */ 
-    while (length && *msg_ptr) { 
-        /* The buffer is in the user data segment, not the kernel 
-         * segment so "*" assignment won't work.  We have to use 
-         * put_user which copies data from the kernel data segment to 
-         * the user data segment. 
-         */ 
-        put_user(*(msg_ptr++), buffer++); 
-        length--; 
-        bytes_read++; 
-    } 
-    *offset += bytes_read; 
-    /* Most read functions return the number of bytes put into the buffer. */ 
+    short count = 0;
+    // читаем, пока есть данные в msg и есть место в буфере пользователя
+    while (len && readPos < 100 && msg[readPos] != 0) {
+        if (put_user(msg[readPos], buff++)) {
+            // ошибка копирования
+            return -EFAULT;
+        }
+        count++;
+        len--;
+        readPos++;
+    }
+    return count;
     return bytes_read; 
 } 
  
