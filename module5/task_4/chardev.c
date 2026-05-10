@@ -101,17 +101,16 @@ static ssize_t device_read(struct file *filp, /* see include/linux/fs.h   */
                            loff_t *offset) { /* Number of bytes actually written to the buffer */ 
     short count = 0;
     // читаем, пока есть данные в msg и есть место в буфере пользователя
-    while (len && readPos < 100 && msg[readPos] != 0) {
-        if (put_user(msg[readPos], buff++)) {
+    while (length && readPos < 100 && msg[readPos] != 0) {
+        if (put_user(msg[readPos], buffer++)) {
             // ошибка копирования
             return -EFAULT;
         }
         count++;
-        len--;
+        length--;
         readPos++;
     }
     return count;
-    return bytes_read; 
 } 
  
 /* Called when a process writes to dev file: echo "hi" > /dev/hello */ 
