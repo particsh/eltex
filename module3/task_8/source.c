@@ -166,7 +166,7 @@ void consumer_cycle(char* filename){
             exit(EXIT_FAILURE);
         }
 
-        char tmpname[512];
+        char tmpname[MAX_LINE_SIZE];
         snprintf(tmpname, sizeof(tmpname), "%s.tmp", filename);
 
         FILE *file_tmp = fopen(tmpname, "w");
