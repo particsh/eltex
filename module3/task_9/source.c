@@ -86,6 +86,7 @@ int generate_random_line(char **line){
 }
 
 void cycle(char* filename){
+    srand(time(NULL));
     sem_t *sem;
     sem = sem_open(NAME_SEM, O_CREAT, 0666, 1);
     if (sem == SEM_FAILED) {
