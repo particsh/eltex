@@ -15,7 +15,7 @@ static int len;
 static int temp;
 static char *msg;
  
-ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *offp ) {
+static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *offp ) {
     if(count > temp) {
         count = temp;
     }
@@ -26,7 +26,7 @@ ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *offp ) {
     return count;
 }
  
-ssize_t write_proc(struct file *filp, const char *buf, size_t count, loff_t *offp) {
+static ssize_t write_proc(struct file *filp, const char *buf, size_t count, loff_t *offp) {
     copy_from_user(msg, buf, count);
     len = count;
     temp = len;
@@ -39,17 +39,17 @@ static const struct proc_ops proc_fops = {
     .proc_write = write_proc,
 };
  
-void create_new_proc_entry(void) { //use of void for no arguments is compulsory now
+static void create_new_proc_entry(void) { //use of void for no arguments is compulsory now
     proc_create(PROC_NAME, PROC_MODE, NULL, &proc_fops);
     msg = kmalloc(BUFF_SIZE * sizeof(char), GFP_KERNEL);
 }
  
-int proc_init (void) {
+static int proc_init (void) {
     create_new_proc_entry();
     return 0;
 }
 
-void proc_cleanup(void) {
+static void proc_cleanup(void) {
     remove_proc_entry(PROC_NAME, NULL);
     kfree(msg);
 }
