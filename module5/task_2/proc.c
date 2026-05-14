@@ -20,6 +20,9 @@ static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *off
         count = temp;
     }
     temp = temp - count;
+    if (copy_to_user(buf, msg, count) > 0){
+        return -EFAULT;
+    }
     copy_to_user(buf, msg, count);
     if(count == 0)
         temp = len;
@@ -27,7 +30,9 @@ static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *off
 }
  
 static ssize_t write_proc(struct file *filp, const char *buf, size_t count, loff_t *offp) {
-    copy_from_user(msg, buf, count);
+    if (copy_from_user(msg, buf, count) > 0){
+        return -EFAULT;
+    }
     len = count;
     temp = len;
     return count;
