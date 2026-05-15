@@ -29,6 +29,7 @@ static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *off
 }
  
 static ssize_t write_proc(struct file *filp, const char *buf, size_t count, loff_t *offp) {
+    // проверяем на наличие пропущенных байтов
     if (copy_from_user(msg, buf, count) > 0){
         return -EFAULT;
     }
