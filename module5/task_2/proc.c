@@ -23,7 +23,6 @@ static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *off
     if (copy_to_user(buf, msg, count) > 0){
         return -EFAULT;
     }
-    copy_to_user(buf, msg, count);
     if(count == 0)
         temp = len;
     return count;
