@@ -6,8 +6,7 @@
 #include <linux/slab.h>
 
 #define PROC_NAME "hello" // имя файлы
-#define PROC_MODE 0644 // прова файла
-#define BUFF_SIZE 256 // размепр буффера
+#define BUFF_SIZE 256 // размер буффера
 
 
 // сделали переменные статическим дабы не было конфликта имен
@@ -20,6 +19,7 @@ static ssize_t read_proc(struct file *filp, char *buf, size_t count, loff_t *off
         count = temp;
     }
     temp = temp - count;
+    // проверяем на наличие пропущенных байтов
     if (copy_to_user(buf, msg, count) > 0){
         return -EFAULT;
     }
@@ -44,8 +44,8 @@ static const struct proc_ops proc_fops = {
     .proc_write = write_proc,
 };
  
-static void create_new_proc_entry(void) { //use of void for no arguments is compulsory now
-    proc_create(PROC_NAME, PROC_MODE, NULL, &proc_fops);
+static void create_new_proc_entry(void) { 
+    proc_create(PROC_NAME, 0, NULL, &proc_fops);
     msg = kmalloc(BUFF_SIZE * sizeof(char), GFP_KERNEL);
 }
  
